@@ -17,18 +17,6 @@ namespace Collections
         csharpColecoes.Adiciona(new Aula("Criando uma Aula", 20));
         csharpColecoes.Adiciona(new Aula("Modelando com Coleções", 19));
 
-        //ordenar a lista de aulas
-       //csharpColecoes.Aulas.Sort();
-
-       //copiar a lista para outra lista
-        List<Aula> aulasCopiadas = new List<Aula>(csharpColecoes.Aulas);
-
-        //ordenar a cópia
-        aulasCopiadas.Sort();
-        //Imprimir
-        //Imprimir(csharpColecoes.Aulas);
-        Imprimir(aulasCopiadas);
-
         Aluno a1 = new Aluno("Vanessa Tonini", 34672);
         Aluno a2 = new Aluno("Ana Losnak", 5617);
         Aluno a3 = new Aluno("Rafael Nercessian", 17645);
@@ -37,25 +25,30 @@ namespace Collections
         csharpColecoes.Matricula(a2);
         csharpColecoes.Matricula(a3);
 
-        Console.WriteLine("Imprimindo os alunos matriculados");
-        foreach (var aluno in csharpColecoes.Alunos)
-        {
-            Console.WriteLine(aluno);
-        }
+        //-----------------------------------------------------------------
+            ///Aparece um erro: "Já foi adicionado um item com a mesma chave"!!
+            //Aluno fabio = new Aluno("Fabio Gushiken", 5617);
+            // csharpColecoes.Matricula(fabio);
 
-        Console.WriteLine($"O aluno a1 {a1.Nome} está matriculado?");
+            /*
+                 # Chave Unica #
+                Uma das características de um dicionário é justamente esta: a chave é única. Não é possível armazenar mais de um valor 
+                em uma chave. Vamos comentar a linha que acabamos de criar e testar o que acontece ao substituirmos o aluno com a chave 
+                5617 pelo valor do aluno fabio.
+             */
+        //-----------------------------------------------------------------
 
-        //Criar um método EstaMatriculado
-        Console.WriteLine(csharpColecoes.EstaMatriculado(a1));
+        //limpando o console
+        Console.Clear();
 
-        //vamos instanciar uma aluna (Vanessa Tonini)
-        Aluno tonini = new Aluno("Vanessa Tonini", 34672);
-        //e verificar se Tonini está matriculada
-        Console.WriteLine("Tonini está matriculada? " + csharpColecoes.EstaMatriculado(tonini));
+        Aluno fabio = new Aluno("Fabio Gushiken", 5617);
+        csharpColecoes.SubstituiAluno(fabio);
 
-
-        Console.WriteLine("a1 é equals a Tonini?");
-        Console.WriteLine(a1.Equals(tonini));
+        //pergunta: "Quem é o aluno com matrícula 5617?"
+        Console.WriteLine("Quem é o aluno com matrícula 5617?");
+        //implementando Curso.BuscaMatriculado
+        Aluno aluno5617 = csharpColecoes.BuscaMatriculado(5617);
+        Console.WriteLine(aluno5617);
       }
       
       private static void Imprimir(IList<Aula> aulas)
@@ -103,6 +96,9 @@ namespace Collections
     
     public class Curso
     {
+        //implementando um dicionário de alunos
+        private IDictionary<int, Aluno> dicionarioAlunos = new Dictionary<int, Aluno>();
+
         private IList<Aula> aulas;      
         /*
         Aulas é o campo privado que está sendo protegido, porém o Visual Studio não consegue converter ReadOnlyCollection para 
@@ -176,11 +172,29 @@ namespace Collections
         public void Matricula(Aluno aluno)
         {
             alunos.Add(aluno);
+            //Adicionando o aluno ao dicionario
+            this.dicionarioAlunos.Add(aluno.NumeroMatricula, aluno);
         }
 
         public bool EstaMatriculado(Aluno aluno)
         {
             return alunos.Contains(aluno);
+        }
+
+        public Aluno BuscaMatriculado(int numeroMatricula)
+        {   
+            //Esse implentacao quebra quando passamos um index que nao conste no dicionario
+            //return this.dicionarioAlunos[numeroMatricula];
+
+            //"tentarmos a obtenção do valor"
+            Aluno aluno = null;
+            this.dicionarioAlunos.TryGetValue(numeroMatricula, out aluno);
+            return aluno;
+        }
+
+        public void SubstituiAluno(Aluno aluno)
+        {
+            this.dicionarioAlunos[aluno.NumeroMatricula] = aluno;
         }
     }
 
@@ -232,50 +246,24 @@ namespace Collections
 }
 
 /*
-Lambda Expressions
-Uma expressão lambda é uma função anônima (isto é, um método sem nome) que permite criar uma expressão inline, 
-ou em linha, sem a necessidade de referenciar um método externo.
+Deste modo conseguimos substituir um aluno para uma matrícula que já existia antes. 
+Para terminar, veremos como um dicionário é implementado internamente. Assim como o HashSet,
+ ele também faz uso de um código de dispersão. No diagrama abaixo veremos que de um lado há 
+ as chaves e, do outro, os valores.
+ ver images na pasta imgem
 
-Uma expressão lambda contém três partes:
+ Ao buscarmos pela chave, o .NET Framework irá pegá-la internamente e rodar um algoritmo para a obtenção do código de dispersão, que indicará o grupo de valores em que cairá o valor que estamos armazenando, como se fossem gavetas ou caixas que os armazenam.
 
-o parâmetro (aula)
-o operador lambda (=>)
-o corpo do método anônimo ({ Console.WriteLine(aula); })
-
-===============================================================
-#####  Tabela de Dispersao(Olhar na paste de imagem) ###########
-===============================================================
-
-Conseguimos superar a comparação default .NET Framework simplesmente implementando o Equals(). Porém, cuidado: sempre que o implementamos,
- precisaremos fazer o mesmo com o hash code.
-
-No início da classe Aluno, veremos como observação, um alerta que indica que esta classe sobrescreve o Equals() mas não o GetHashCode.
-O que isto significa?
-
-Trata-se de um código de dispersão, ou espalhamento. A imagem abaixo representa o nosso conjunto de alunos, que são convertidos 
-internamente no HashSet para códigos. Estes cairão em uma tabela de dispersão, também conhecida por HashTable, responsável 
-por informar as "caixinhas" em que estes conjuntos de alunos cairão.
+A busca pode ser mais ou menos eficiente de acordo com o código de dispersão. Na grande maioria dos casos, como no do dicionário,
+ é possível confiar no algoritmo gerado no GetHashCode do próprio programa. Observando o diagrama, para obtermos o valor Rafael R
+ ollo ou Rafael Nercessian, ambos caíram no mesmo grupo, pois seus valores foram calculados para o mesmo hash code (código de dispersão)
+  do dicionário.
 
 
 
-Quer dizer que quanto maior a dispersão, ou mais espalhado forem as caixinhas, maior será a eficiência no algoritmo de busca para posterior comparação ou verificação de um elemento em um objeto. Como podemos ver na imagem, todos os alunos caíram em caixas diferentes, com exceção do Rafael Rollo e do Rafael Nercessian, que caíram em 152 (o HashCode gerado, o tal do código de dispersão), em que ocorreu uma colisão de códigos.
+  Você sabe como os elementos de um dicionário são espalhados na memória? 
+  Que informação é usada por um Dictionary<TKey, TValue> para mapear um elemento para um grupo de dispersão?
 
-Uma colisão indica que dois ou mais elementos estão caindo no mesmo grupo. Nisso, verifica-se se o elemento está realmente contido naquela caixa e, paralelamente, todos os seus elementos são varridos. Ou seja, para verificar se o Rafael Nercessian está contido em uma caixa específica, por exemplo, passamos primeiro pelo Rafael Rollo. É como se uma "segunda etapa" tivesse acontecido.
-
-Poderíamos ter muitos elementos em uma única caixa, deixando nosso código menos eficiente. Então, via de regra, ao implementarmos o método Equals(), fazemos o mesmo com o GetHashCode para que a dispersão aconteça corretamente. Reforçando também que a rapidez de busca depente do código de dispersão.
-
-Para implementarmos este código de dispersão (GetHashCode), utilizaremos o override para sobrescrita. Como boa prática, seguiremos o mesmo conceito do Equals(), que compara nome com nome. Em Alunos.cs:
-
-public override int GetHashCode()
-{
-    return this.nome.GetHashCode();
-}
-Futuramente trabalharemos com dicionários, também beneficiados por este código de dispersão.
-
-Outra informação importante é que dois objetos iguais possuem o mesmo hash code, porém o inverso nem sempre é verdadeiro, ou seja, dois objetos com mesmo hash code não são necessariamente iguais.
-
-Link
-https://www.caelum.com.br/apostila-csharp-orientacao-objetos/lidando-com-conjuntos/#buscas-rpidas-utilizando-dicionrios
-
+  O código de dispersão (hash) da chave do elemento 
+  Isso aí! É pelo Hash Code da chave (key) do elemento que o dicionário sabe onde posicionar o elemento na memória.
  */
-
