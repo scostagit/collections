@@ -12,7 +12,25 @@ namespace Collections
       {
         Curso csharpColecoes = new Curso("C# Collections", "Marcelo Oliveira");
         csharpColecoes.Adiciona(new Aula("Trabalhando com Listas", 21));
-        Imprimir(csharpColecoes.Aulas);
+
+         //adicionar 2 aulas
+        csharpColecoes.Adiciona(new Aula("Criando uma Aula", 20));
+        csharpColecoes.Adiciona(new Aula("Modelando com Coleções", 19));
+
+        //ordenar a lista de aulas
+       //csharpColecoes.Aulas.Sort();
+
+       //copiar a lista para outra lista
+        List<Aula> aulasCopiadas = new List<Aula>(csharpColecoes.Aulas);
+
+        //ordenar a cópia
+        aulasCopiadas.Sort();
+        //Imprimir
+        //Imprimir(csharpColecoes.Aulas);
+        Imprimir(aulasCopiadas);
+
+        Console.WriteLine(csharpColecoes.TempoTotal);
+        Console.WriteLine(csharpColecoes);
       }
       
       private static void Imprimir(IList<Aula> aulas)
@@ -91,6 +109,20 @@ namespace Collections
             get { return instrutor; }
             set { instrutor = value; }
         }
+
+        public int TempoTotal
+        {
+            get
+            {
+                /*int total = 0;
+                foreach (var aula in aulas)
+                {
+                    total += aula.Tempo;
+                }
+                return total;*/
+                return aulas.Sum(aula => aula.Tempo);
+            }
+        }
         
         public Curso(string nome, string instrutor)
         {
@@ -98,40 +130,22 @@ namespace Collections
             this.instrutor = instrutor;
             this.aulas = new List<Aula>();
         }
+
+        public override string ToString()
+        {
+            return $"Curso: {nome}, Tempo: {TempoTotal}, Aulas: {string.Join(",", aulas)}";
+        }
     }
 }
 
 /*
-Conseguimos criar a classe Curso com sucesso, populando e imprimindo as aulas. No entanto, há um problema não muito evidente, 
-conhecido por code smell na programação, ou "mau cheiro no código", que neste caso implica no fato de acessarmos csharpColecoes.
-Aulas e a lista de aulas da classe Curso adicionando elementos nela.
+Lambda Expressions
+Uma expressão lambda é uma função anônima (isto é, um método sem nome) que permite criar uma expressão inline, 
+ou em linha, sem a necessidade de referenciar um método externo.
 
-Isso significa que estamos "passando por cima" da responsabilidade da classe Curso de manter suas propriedades, e 
-estamos manipulando diretamente 
-esta lista de aulas.
+Uma expressão lambda contém três partes:
 
-O correto seria chamarmos um método da classe Curso para podermos adicionar estes elementos. Caso contrário, esta classe não tem nenhum controle 
-sobre as suas aulas, pois esta listagem está exposta.
-
-Trata-se de um code smell por ser uma "exposição indecente". Para evitarmos que uma propriedade fique exposta à manipulações externas,
-é necessário encapsularmos esta funcionalidade de adicionar elementos na lista.
-
-Então, primeiramente, teremos que bloquear esta lista interna para evitar a possibilidade de manipulação por código externo. Acessando-se a classe 
-Curso, modificaremos a propriedade Aulas, em que encontramos get e set.
-
-Removeremos o set, pois do jeito que está, qualquer um pode alterá-lo para um valor nulo, e a classe Curso perde qualquer 
-chance de barrar esta modificação. Feito isso, retornaremos não mais uma lista de aulas (List<Aula>) em get, mas outro tipo de objeto, 
-uma coleção somente leitura (read only collection).
-
-ReadOnlyCollection se localiza no .NET com namespace System.Collections.ObjectModel, e é uma classe genérica, portanto necessita 
-também do tipo de elemento (no caso, a classe Aula). Precisaremos passar no construtor um parâmetro que é uma lista, a própria
- referência das aulas.
-
-Error:
-Veremos outro problema, desta vez na hora de chamarmos o método Imprimir(), pois estamos passando uma propriedade de tipo IList<>, 
-e nosso método recebe List<>. Precisaremos fazer a devida alteração.
-
-Feito isso, rodaremos a aplicação! Há um erro: System.NotSupportedException "Coleção é somente leitura". Protegemos nossa coleção para que ela 
-fosse somente leitura, e assim, o código externo fica impedido de modificar esta coleção.
-
-*/
+o parâmetro (aula)
+o operador lambda (=>)
+o corpo do método anônimo ({ Console.WriteLine(aula); })
+ */
