@@ -1,0 +1,33 @@
+
+O que e um hashSet?
+
+Um HashSet é uma coleção que representa um conjunto de valores. Falando assim, ele se parece com uma lista.
+ Porém, existem diferenças claras:
+
+Um conjunto não aceita duplicação de itens. Por outro lado, uma lista permite que o mesmo valor seja armazenado 
+em várias posições diferentes.
+Um conjunto não é uma sequência. Diferente da classe List, onde adicionamos elementos ao final da coleção, os
+elementos do conjunto HashSet não são mantidos em nenhuma ordem específica.
+
+
+Declarando um HashSet
+Vamos iniciar criando um projeto Console Application novo. Nesse projeto iremos criar um conjunto de alunos.
+
+Um conjunto HashSet é uma classe genérica, que declararmos passando o tipo dos elementos:
+
+HashSet<string> alunos = new HashSet<string>();
+Como HashSet é uma classe que implementa ISet, podemos fazer uso do polimorfismo declarando alunos como ISet:
+
+ISet<string> alunos = new HashSet<string>();
+
+
+
+Aí sim, começamos a adicionar elementos a esse conjunto. Vamos alimentar essa coleção com três alunos, usando método Add:
+
+alunos.Add("Vanessa Tonini");
+alunos.Add("Ana Losnak");
+alunos.Add("Rafael Nercessian");
+
+Nesse caso, vamos fazer algo diferente: gerando uma string concatenando todos os alunos separados por vírgula. Felizmente, a classe string possui o método que facilita esse trabalho:
+
+string.Join(",", alunos)
