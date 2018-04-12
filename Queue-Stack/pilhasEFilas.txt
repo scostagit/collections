@@ -1,0 +1,27 @@
+List<string> frutas = new List<string>
+{
+    "abacate", "banana", "caqui", "damasco", "figo"
+};
+//vamos imprimir essa lista
+foreach (var fruta in frutas)
+{
+    Console.WriteLine(fruta);
+}
+Rodando a aplicação, teremos:
+
+abacate
+banana
+caqui
+damasco
+figo
+Esta lista é armazenada em memória em um array interno, com posições sequenciais. Caso queiramos adicionar um elemento ao fim da lista, apenas a última posição será alterada, sendo possível removê-lo posteriormente, e redimensionar a lista.
+
+Para inserirmos um elemento no meio da lista, algo que exige mais esforço computacional, usaremos como exemplo a imagem abaixo, com caju ocupando a posição após banana, antes ocupada por caqui. damasco e figo, que estavam na sequência, também serão deslocados à direita.
+
+frutas ocupando retângulos alinhados horizontalmente e representando a memória, e setas vermelhas indicando deslocamento de elementos
+
+Por causa dos deslocamentos, há necessidade de maior processamento. Se quisermos remover caju, o que acontecerá? Não poderemos ter um "buraco" no meio do array de listagem. Neste caso, os elementos seguintes precisarão ser realocados.
+
+Para uma lista pequena, este processo é relativamente rápido, porém o desempenho será afetado conforme o tamanho da lista, sendo portanto ineficiente para listas maiores. Para estes casos, em que inserções ou remoções ocorrem frequentemente, é necessário utilizar outro tipo de coleção do .NET Framework, a Lista Ligada (ou linked list).
+
+Com ela, poderemos esquecer a organização em memória sequenciada, já que seus elementos não precisam estar memorizados em sequência para representar a ordem desejada. Cada elemento contém sua posição anterior, atual e seguinte, e chamamos isto de nó. Ou seja, cada elemento é um nó que contém um valor.
