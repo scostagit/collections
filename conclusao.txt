@@ -1,0 +1,27 @@
+========================================================================================================================================
+-- CONCLUSAO ---------------------------------------------------------------------------------------------------------------------------
+========================================================================================================================================
+
+Iniciamos com o tipo de coleção mais básico e primitivo do .NET Framework, as matrizes ou arrays. Vimos como acessá-los e modificá-los 
+utilizando a sintaxe de índice, com métodos estáticos para reverter ou redimensioná-los, e também como copiar e clonar seus valores.
+
+Em seguida começamos a aprender sobre as listas, também conhecidas como arrays dinâmicos, e as exploramos criando uma lista de elementos 
+de uma classe customizada. Para ordenar os elementos desta classe, utilizamos a interface IComparable e implementamos o método CompareTo().
+
+Aprendemos a criar objetos que expõem coleções do tipo "somente leitura" para protegermos estas coleções de alterações externas à classe, 
+por meio de ReadOnlyCollection<>.
+
+Vimos como clonar e copiar valores, totalizando valores dos objetos contidos nas listas, e como trabalhar com a classe HashSet, 
+baseada no conceito de conjuntos matemáticos. Aprendemos o que é hashing, também conhecido como espalhamento, e implementamos os 
+métodos necessários para a sua definição.
+
+Para gravar valores ou obtê-los facilmente a partir de uma chave, conhecemos a classe dicionário.
+
+Aprendemos sobre listas ligadas e como os nós que as compõem são conectados durante a criação deste tipo de coleção. Em seguida,
+vimos as pilhas (Stack), coleções utilizadas na implementação da funcionalidade dos botões de "anterior" e "próximo" de um navegador 
+Web, por exemplo. Implementamos a mesma funcionalidade de maneira bem simples.
+
+Por último, vimos o conceito de filas, as Queues, utilizando para isso o exemplo do pedágio para entendermos os veículos entrando
+e saindo da fila.
+
+========================================================================================================================================
