@@ -29,7 +29,7 @@ namespace Collections
 
 
         Console.WriteLine("União de duas sequências com comparador");
-        var consulta3 = seq1.Union(seq2, StringComparison.InvariantCultureIgnoreCase);
+       var consulta3 = seq1.Union(seq2, StringComparer.CurrentCultureIgnoreCase);
                                          
         foreach (var item in consulta3)
         {
