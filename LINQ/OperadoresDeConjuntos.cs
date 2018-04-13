@@ -24,9 +24,7 @@ namespace Collections
         foreach (var item in consulta2)
         {
             Console.WriteLine(item);
-        }
-        
-
+        } 
 
         Console.WriteLine("União de duas sequências com comparador");
        var consulta3 = seq1.Union(seq2, StringComparer.CurrentCultureIgnoreCase);
@@ -36,19 +34,16 @@ namespace Collections
             Console.WriteLine(item);
         }*/
 
-
         Console.WriteLine("Intersecção de duas sequências");
             var consulta4 = seq1.Intersect(seq2); //vai exibiri so fevereiro
             foreach (var item in consulta4)
             {
-                    Console.WriteLine(item);
+                Console.WriteLine(item);
             }
 
         Console.WriteLine();
    
       }
-     
-     
     }
 }
 
